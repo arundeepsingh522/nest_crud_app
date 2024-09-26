@@ -18,7 +18,7 @@ export class AppController {
   }
   @Get('/health')
   getHealth():string{
-    console.log('Health check');
+    console.log('Health check in nest ');
     
     return this.appService.getHealth();
 
