@@ -2,30 +2,67 @@ import React, { useState } from "react";
 import "./Todo.css";
 
 function Todo() {
-  const [inputs, setInputs] = useState({ title: "", todo: "" }); // Use an object to store both inputs
-  const [addTodos, setAddTodos] = useState([]); // State for added todos
+  const [inputs, setInputs] = useState({ title: "", todo: "" });
+  const [addTodos, setAddTodos] = useState([]);
+  const [clickedStates, setClickedStates] = useState({});
+  const [isEditing, setIsEditing] = useState(false); 
 
   const handleChange = (event) => {
-    const { name, value } = event.target; // Destructure name and value from the event target
-    const isValid = /^[a-zA-Z0-9]*$/.test(value); // Check validity
+    const { name, value } = event.target;
+    const isValid = /^[a-zA-Z0-9 ]*$/.test(value); 
 
-    if (isValid || name === "title") { // Allow title to have more characters
-      setInputs((prevInputs) => ({ ...prevInputs, [name]: value })); // Update state for the specific input
+    if (isValid || name === "title") {
+      setInputs((prevInputs) => ({ ...prevInputs, [name]: value }));
     } else {
       console.log("Invalid input, only letters and numbers are allowed.");
     }
   };
 
   const handleAddTodo = () => {
-    if (inputs.todo) {
-      setAddTodos([...addTodos, { id: Date.now(), title: inputs.title, text: inputs.todo }]);
-      setInputs({ title: "", todo: "" }); // Clear input fields after adding
+    if (inputs.todo && inputs.title) {
+      if (isEditing) {
+        setAddTodos((prev) =>
+          prev.map((item) =>
+            item.id === isEditing
+              ? { ...item, title: inputs.title, text: inputs.todo }
+              : item
+          )
+        );
+        setIsEditing(null);
+      } else {
+        // Add new todo
+        setAddTodos((prev) => [
+          ...prev,
+          { id: Date.now(), title: inputs.title, text: inputs.todo },
+        ]);
+      }
+      setInputs({ title: "", todo: "" }); 
     }
   };
 
   const handleDelete = (id) => {
     const filteredData = addTodos.filter((value) => value.id !== id);
     setAddTodos(filteredData);
+    setClickedStates((prev) => {
+      const newStates = { ...prev };
+      delete newStates[id]; 
+      return newStates;
+    });
+    setInputs({ title: "", todo: "" });
+    setIsEditing(false);
+  };
+
+  const handleClicked = (id) => {
+    setClickedStates((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const handleEdit = (id) => {
+    const editValue = addTodos.find((val) => val.id === id);
+    setInputs({ title: editValue.title, todo: editValue.text }); 
+    setIsEditing(id); 
   };
 
   return (
@@ -37,36 +74,61 @@ function Todo() {
       <div className="todo-input-field">
         <input
           type="text"
-          name="title" // Use name attribute to identify the input
-          placeholder="Title"
-          value={inputs.title} // Bind to the title state
+          name="title"
+          placeholder="Title..."
+          value={inputs.title}
           onChange={handleChange}
         />
         <input
           type="text"
-          name="todo" // Use name attribute to identify the input
-          placeholder="Enter a Todo..."
-          value={inputs.todo} // Bind to the todo state
+          name="todo"
+          placeholder="Description..."
+          value={inputs.todo}
           onChange={handleChange}
         />
-        <button onClick={handleAddTodo}>Add</button>
+        <button onClick={handleAddTodo}>{isEditing ? "Edit" : "Add"}</button>
       </div>
 
       <div className="listing-todo">
-        {addTodos.map((item) => (
+        {addTodos.map((item, index) => (
           <div className="todo" key={item.id}>
-            <h1>{item.title}</h1>
+            <h3>Task: {index + 1}</h3>
+            <h2>Title: {item.title}</h2>
             <ul>
-              <li>{item.text}</li>
+              <li>Description: {item.text}</li>
               <div className="icon">
-                <span>
-                  <img src="tick.png" height={"30px"} width={"30px"} alt="Complete" />
+                <span onClick={() => handleClicked(item.id)}>
+                  {clickedStates[item.id] ? (
+                    <img
+                      src="green-tick.png"
+                      height={"30px"}
+                      width={"30px"}
+                      alt="Complete"
+                    />
+                  ) : (
+                    <img
+                      src="tick.png"
+                      height={"30px"}
+                      width={"30px"}
+                      alt="Complete"
+                    />
+                  )}
                 </span>
-                <span>
-                  <img src="edit.png" height={"30px"} width={"30px"} alt="Edit" />
+                <span onClick={() => handleEdit(item.id)}>
+                  <img
+                    src="edit.png"
+                    height={"30px"}
+                    width={"30px"}
+                    alt="Edit"
+                  />
                 </span>
                 <span onClick={() => handleDelete(item.id)}>
-                  <img src="delete.png" height={"30px"} width={"30px"} alt="Delete" />
+                  <img
+                    src="delete.png"
+                    height={"30px"}
+                    width={"30px"}
+                    alt="Delete"
+                  />
                 </span>
               </div>
             </ul>
