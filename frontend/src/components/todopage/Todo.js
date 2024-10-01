@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios"
 import "./Todo.css";
 
 function Todo() {
@@ -7,6 +8,8 @@ function Todo() {
   const [clickedStates, setClickedStates] = useState({});
   const [isEditing, setIsEditing] = useState(false); 
 
+
+  
   const handleChange = (event) => {
     const { name, value } = event.target;
     const isValid = /^[a-zA-Z0-9 ]*$/.test(value); 
@@ -17,7 +20,6 @@ function Todo() {
       console.log("Invalid input, only letters and numbers are allowed.");
     }
   };
-
   const handleAddTodo = () => {
     if (inputs.todo && inputs.title) {
       if (isEditing) {
