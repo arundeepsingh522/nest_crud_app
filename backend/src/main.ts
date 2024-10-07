@@ -8,6 +8,14 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port=configService.get<number>('PORT')||5000;
 
+    // Enable CORS for all origins
+    app.enableCors({
+      origin: '*', // Allow all origins. You can specify an array of origins if needed.
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed methods
+      credentials: false, // If you need to allow cookies, set this to true
+    });
+  
+
  
   app.useGlobalPipes(new ValidationPipe({
     transform: true,

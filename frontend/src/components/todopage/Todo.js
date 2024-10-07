@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios"
+import React, { useState } from "react";
 import "./Todo.css";
+import { showSuccesToast } from "../../utils/utils";
 
 function Todo() {
   const [inputs, setInputs] = useState({ title: "", todo: "" });
@@ -8,8 +8,6 @@ function Todo() {
   const [clickedStates, setClickedStates] = useState({});
   const [isEditing, setIsEditing] = useState(false); 
 
-
-  
   const handleChange = (event) => {
     const { name, value } = event.target;
     const isValid = /^[a-zA-Z0-9 ]*$/.test(value); 
@@ -20,6 +18,7 @@ function Todo() {
       console.log("Invalid input, only letters and numbers are allowed.");
     }
   };
+
   const handleAddTodo = () => {
     if (inputs.todo && inputs.title) {
       if (isEditing) {
@@ -30,9 +29,8 @@ function Todo() {
               : item
           )
         );
-        setIsEditing(null);
+        setIsEditing(false);
       } else {
-        // Add new todo
         setAddTodos((prev) => [
           ...prev,
           { id: Date.now(), title: inputs.title, text: inputs.todo },
@@ -42,12 +40,13 @@ function Todo() {
     }
   };
 
+
   const handleDelete = (id) => {
     const filteredData = addTodos.filter((value) => value.id !== id);
     setAddTodos(filteredData);
     setClickedStates((prev) => {
       const newStates = { ...prev };
-      delete newStates[id]; 
+      delete newStates[id];
       return newStates;
     });
     setInputs({ title: "", todo: "" });
@@ -63,8 +62,8 @@ function Todo() {
 
   const handleEdit = (id) => {
     const editValue = addTodos.find((val) => val.id === id);
-    setInputs({ title: editValue.title, todo: editValue.text }); 
-    setIsEditing(id); 
+    setInputs({ title: editValue.title, todo: editValue.text });
+    setIsEditing(id);
   };
 
   return (
@@ -88,13 +87,15 @@ function Todo() {
           value={inputs.todo}
           onChange={handleChange}
         />
-        <button onClick={handleAddTodo}>{isEditing ? "Edit" : "Add"}</button>
+        <button onClick={handleAddTodo}>
+          {isEditing ? "Save Changes" : "Add Todo"}
+        </button>
       </div>
 
       <div className="listing-todo">
-        {addTodos.map((item, index) => (
+        {addTodos && addTodos.length>0?(
+        addTodos.map((item, index) => (
           <div className="todo" key={item.id}>
-            <h3>Task: {index + 1}</h3>
             <h2>Title: {item.title}</h2>
             <ul>
               <li>Description: {item.text}</li>
@@ -135,7 +136,7 @@ function Todo() {
               </div>
             </ul>
           </div>
-        ))}
+        ))):(<div>No list</div>)}
       </div>
     </div>
   );
