@@ -62,7 +62,7 @@ function Todo() {
   const handleAddTodo = async () => {
     console.log("Adding Todo:", inputs.todo, inputs.title);
 
-    if (!inputs?.todo || !inputs?.title) {
+    if (!inputs?.todo.trim() || !inputs?.title.trim()) {
       showErrorToast("Please provide both the title and Description.");
       return;
     }
