@@ -25,8 +25,6 @@ export class TodoService {
   // Get all Todos
   async findAll(): Promise<Todo[]> {
     try {
-        console.log('finding all todos');
-        
       return await this.todoModel.find().exec();
     } catch (error) {
       throw new BadRequestException('Error fetching todos');
@@ -51,7 +49,7 @@ export class TodoService {
     try {
       console.log('updating todo...');
       
-      console.log('id provided',id);
+     
       
       const updatedTodo = await this.todoModel.findByIdAndUpdate(
         id,
@@ -59,7 +57,7 @@ export class TodoService {
         { new: true, runValidators: true } // Return the updated document and run validation
       );
 
-        console.log('updatedTodo',updatedTodo);
+ 
         
 
       if (!updatedTodo) {
@@ -77,7 +75,7 @@ export class TodoService {
   async delete(id: string): Promise<Todo> {
     try {
       const deletedTodo = await this.todoModel.findByIdAndDelete(id).exec();
-      console.log('deleted To ',deletedTodo);
+     
       
       if (!deletedTodo) {
         throw new NotFoundException(`Todo with ID ${id} not found for deletion`);
