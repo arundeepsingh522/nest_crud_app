@@ -40,7 +40,9 @@
   height: 450px;
   overflow-y: scroll;
   scrollbar-width: 1px;
+  
 }
+
 
 .noTodo{
   height: 100%;
