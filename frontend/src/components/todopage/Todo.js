@@ -8,8 +8,8 @@ function Todo() {
   const [addTodos, setAddTodos] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
-  const maxTitleLength = 50; // Set your maximum length for title
-  const maxDescriptionLength = 150; // Set your maximum length for description
+  const maxTitleLength = 100; // Set your maximum length for title
+  const maxDescriptionLength = 300; // Set your maximum length for description
 
   const fetchTodos = async () => {
     try {
