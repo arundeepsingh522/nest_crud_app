@@ -3,10 +3,14 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
+ 
   const configService = app.get(ConfigService);
-  const port=configService.get<number>('PORT')||5000;
+  //const port=configService.get<number>('PORT')||5000;
+  const port =5000;
 
     // Enable CORS for all origins
     app.enableCors({

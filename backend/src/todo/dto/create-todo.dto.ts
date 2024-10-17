@@ -8,6 +8,7 @@ export class CreateTodoDto {
     @IsNotEmpty({message:'Description is required'})
     readonly description: string;
 
+    
     @IsOptional() //This field is optional
     readonly completed?: boolean;
   }

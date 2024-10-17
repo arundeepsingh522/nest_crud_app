@@ -1,0 +1,20 @@
+# Use the latest Node.js image for building the application
+FROM node:latest
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the application code
+COPY . .
+
+# Build the React application
+RUN npm run build
+
+# Start the application (this can be served using a simple server)
+CMD ["npm", "start"]

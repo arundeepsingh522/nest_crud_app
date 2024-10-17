@@ -14,7 +14,7 @@ function Todo() {
   const fetchTodos = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:3001/todos");
+      const response = await axios.get("http://localhost:5000/todos");
       console.log("Fetched todos:", response.data);
       setAddTodos(response.data);
     } catch (error) {
@@ -31,7 +31,7 @@ function Todo() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    const isValid = /^[a-zA-Z0-9 ]*$/.test(value);
+    const isValid = true
 
     // Limit the length of the title
 
@@ -71,14 +71,14 @@ function Todo() {
       setLoading(true);
       if (isEditing) {
         // Update the existing todo
-        await axios.put(`http://localhost:3001/todos/${isEditing}`, {
+        await axios.put(`http://localhost:5000/todos/${isEditing}`, {
           title: inputs.title,
           description: inputs.todo,
         });
         showSuccesToast("Todo updated successfully");
       } else {
         // Add a new todo
-        await axios.post("http://localhost:3001/todos", {
+        await axios.post("http://localhost:5000/todos", {
           title: inputs.title,
           description: inputs.todo,
         });
@@ -101,7 +101,7 @@ function Todo() {
     console.log("Deleting todo with id:", id);
 
     try {
-      await axios.delete(`http://localhost:3001/todos/${id}`);
+      await axios.delete(`http://localhost:5000/todos/${id}`);
       showSuccesToast("Todo deleted successfully");
       // Fetch updated todos after deleting
       await fetchTodos();
@@ -114,7 +114,7 @@ function Todo() {
   const handleClicked = async (id, isCompleted) => {
     try {
       //through api
-      const response = await axios.put(`http://localhost:3001/todos/${id}`, {
+      const response = await axios.put(`http://localhost:5000/todos/${id}`, {
         completed: !isCompleted,
       });
       // showSuccesToast('Todo status updated successfully');

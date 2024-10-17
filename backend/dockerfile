@@ -1,0 +1,26 @@
+# Use the latest Node.js image
+FROM node:latest
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Install ping utility
+RUN apt-get update && apt-get install -y iputils-ping && rm -rf /var/lib/apt/lists/*
+
+# Copy package.json and package-lock.json to install dependencies
+COPY package*.json ./
+
+# Install project dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Build the NestJS application (this compiles TypeScript into JavaScript)
+RUN npm run build
+
+# Expose the port NestJS will use
+EXPOSE 5000
+
+# Command to start the NestJS application (this runs the built version)
+CMD ["node", "dist/main"]
